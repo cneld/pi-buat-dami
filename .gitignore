@@ -1,0 +1,16 @@
+# Sensitive — jangan push
+auth.json
+mcp-cache.json
+mcp-onboarding.json
+run-history.jsonl
+sessions/
+trust.json
+context-mode/
+git/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
