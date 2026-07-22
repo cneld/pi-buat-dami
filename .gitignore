@@ -1,8 +1,9 @@
-# Keys & auth — JANGAN PUSH
+# Sensitive — JANGAN PUSH
+auth.json
 agent/auth.json
 agent/models-store.json
 
-# Sessions & prompts — data pribadi
+# Sessions & prompts
 agent/sessions/
 agent/run-history.jsonl
 
@@ -18,7 +19,11 @@ agent/teams/
 tasks/
 
 # node_modules
+node_modules/
 agent/npm/node_modules/
+
+# Permission system logs (bocorin command & path)
+agent/extensions/pi-permission-system/logs/
 
 # OS junk
 .DS_Store
