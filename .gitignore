@@ -25,6 +25,9 @@ agent/npm/node_modules/
 # Permission system logs (bocorin command & path)
 agent/extensions/pi-permission-system/logs/
 
+# Stale nested clone
+.pi/
+
 # OS junk
 .DS_Store
 Thumbs.db

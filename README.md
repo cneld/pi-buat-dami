@@ -30,10 +30,9 @@ npm install
 
 | Path | Isi |
 |------|-----|
-| `.pi/settings.json` | Skill yang diaktifin |
-| `.pi/agent/settings.json` | Model, theme, packages, provider |
-| `.pi/agent/keybindings.json` | Keybindings kustom |
-| `.pi/agent/themes/` | Tema kustom |
-| `.pi/agent/extensions/` | Extension scripts |
-| `.pi/agent/intercom/` | Intercom config |
-| `.pi/agent/npm/package.json` | Dependencies |
+| `settings.json` | Skill yang diaktifin |
+| `agent/settings.json` | Model, theme, packages, provider |
+| `agent/keybindings.json` | Keybindings kustom |
+| `agent/themes/` | Tema kustom |
+| `agent/extensions/` | Extension scripts |
+| `agent/npm/package.json` | Dependencies |

@@ -1,9 +1,0 @@
-{
-  "enableSkillCommands": true,
-  "skills": [
-    "~/.pi/skills/academic-research-skills/academic-paper",
-    "~/.pi/skills/academic-research-skills/deep-research",
-    "~/.pi/skills/academic-research-skills/academic-paper-reviewer",
-    "~/.pi/skills/academic-research-skills/academic-pipeline"
-  ]
-}

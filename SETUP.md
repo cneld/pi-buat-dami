@@ -48,4 +48,4 @@ Daftar key yang perlu disesuaikan sama provider yang lu pake.
 
 ### 5. (Opsional) Vault path buat Second Brain
 
-Set env variable `PI_VAULT_PATH` atau edit langsung di `~/.pi/agent/extensions/clarify.ts`.
+Set env variable `PI_VAULT_PATH` atau edit langsung di `agent/extensions/clarify.ts`.
