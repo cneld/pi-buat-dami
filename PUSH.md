@@ -1,0 +1,134 @@
+# Push Guide — Pi Agent Config
+
+## Sebelum Push
+
+```powershell
+cd ~\.pi
+```
+
+### Cek status
+
+```powershell
+git status
+```
+
+### Cek apa aja yang berubah (diff)
+
+```powershell
+git diff --stat
+```
+
+### Cek kalo ada file sensitif kecantol
+
+```powershell
+git status | Select-String "auth|secret|key|token|session|run-history"
+```
+
+─ Kalo ada yang nggak seharusnya, tambahin ke `.gitignore` atau `git rm --cached`.
+─ `.gitignore` udah nge-filter: `auth.json`, `session/`, `run-history.jsonl`, `mcp-cache.json`, `context-mode/`, `intercom/`, `teams/`, `tasks/`, `node_modules/`, permission logs, dan `~/.omp` files.
+
+---
+
+## Commit
+
+```powershell
+git add -A
+git commit -m "pesan jelas"
+```
+
+**Contoh pesan commit:**
+- `"Tambah theme catppuccin-mocha"`
+- `"Update settings model baru"`
+- `"Fix: extension orca-prefill error"`
+- `"Bersihin duplikat file"`
+- `"v2 — ganti default provider ke openrouter"`
+
+---
+
+## Tag Versi
+
+Kalo ini versi baru (teman bisa checkout versi tertentu):
+
+```powershell
+git tag v2           # tag versi sekarang
+git push origin v2   # push tag
+```
+
+Teman clone:
+
+```powershell
+git clone <url> ~\.pi
+git checkout v1      # ambil versi 1
+```
+
+---
+
+## Push
+
+```powershell
+git push origin main
+```
+
+Kalo pake tag:
+
+```powershell
+git push origin main --tags
+```
+
+---
+
+## Yang Kepush
+
+| Path | Isi |
+|------|-----|
+| `settings.json` | Skill yang diaktifin |
+| `agent/settings.json` | Model, theme, packages, provider |
+| `agent/keybindings.json` | Keybindings kustom |
+| `agent/themes/` | Tema |
+| `agent/extensions/` | Extension scripts |
+| `agent/git/` | Git config per-domain |
+| `agent/npm/package.json` | Dependencies (kagak termasuk node_modules) |
+| `agent/bin/` | Binary tools (fd, rg) |
+| `agent/skills/` | Skill files |
+| `agent/trust.json` | Trusted directories |
+| `agent/usage-bar.json` | Usage bar config |
+| `agent/mcp-onboarding.json` | MCP onboarding state |
+| `qcode/settings.json` | QCode settings |
+| `README.md` | Info repo |
+| `SETUP.md` | Cara setup buat temen |
+| `PUSH.md` | Ini |
+
+## Yang Gak Kepush (aman)
+
+| Dilewati | Karena |
+|----------|--------|
+| `auth.json` | API keys, OAuth tokens |
+| `models-store.json` | Model API config |
+| `sessions/` | Riwayat chat pribadi |
+| `run-history.jsonl` | Prompt & response |
+| `mcp-cache.json` | Responses dari tools (bocorin data) |
+| `context-mode/` | Indexed content |
+| `intercom/`, `teams/` | IPC & orchestration |
+| `tasks/` | Task artifacts |
+| `node_modules/` | Bisa 500MB+ |
+| `~/.omp/` | Oh My Pi (udah gak dipake) |
+| Permission logs | Isinya command & path |
+
+---
+
+## Flow Cepet
+
+```powershell
+cd ~\.pi
+git status
+git add -A
+git commit -m "update config"
+git push origin main
+```
+
+Kalau versi baru:
+
+```powershell
+git tag v3
+git push origin main --tags
+```
