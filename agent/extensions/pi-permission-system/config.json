@@ -1,0 +1,53 @@
+{
+  "debugLog": false,
+  "permissionReviewLog": true,
+  "yoloMode": false,
+
+  "toolInputPreviewMaxLength": 400,
+  "toolTextSummaryMaxLength": 120,
+
+  "piInfrastructureReadPaths": [],
+
+  "permission": {
+    "*": "ask",
+    "path": {
+      "*": "allow"
+    },
+    "external_directory": "allow",
+
+    "read": "allow",
+    "grep": "allow",
+    "find": "allow",
+    "ls": "allow",
+    "web_search": "allow",
+    "fetch_content": "allow",
+    "get_search_content": "allow",
+    "firecrawl_scrape": "allow",
+    "firecrawl_map": "allow",
+    "firecrawl_search": "allow",
+    "chrome_devtools_list_pages": "allow",
+    "chrome_devtools_select_page": "allow",
+    "chrome_devtools_navigate": "allow",
+    "chrome_devtools_screenshot": "allow",
+    "chrome_devtools_evaluate": "allow",
+    "lsp_diagnostics": "allow",
+    "obsidian_cli": "allow",
+    "ctx_execute": "allow",
+    "ctx_execute_file": "allow",
+    "ctx_search": "allow",
+    "ctx_stats": "allow",
+    "ctx_doctor": "allow",
+    "ctx_index": "allow",
+    "ctx_fetch_and_index": "allow",
+    "ctx_batch_execute": "allow",
+
+    "write": "ask",
+    "edit": "ask",
+    "bash": "ask",
+    "goal_complete": "ask",
+    "lsp_fix": "ask",
+
+    "skill": { "*": "ask" },
+    "mcp": { "*": "ask" }
+  }
+}

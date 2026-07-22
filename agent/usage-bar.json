@@ -1,0 +1,34 @@
+{
+  "ui": {
+    "show_bars": true,
+    "show_status": true
+  },
+  "anthropic": {
+    "enabled": true,
+    "show_5h": true,
+    "show_7d": false,
+    "show_model": false
+  },
+  "openai": {
+    "enabled": false,
+    "show_5h": true,
+    "show_7d": false
+  },
+  "github-copilot": {
+    "enabled": false,
+    "show_mo": true
+  },
+  "zai": {
+    "enabled": false,
+    "show_5h": true,
+    "show_7d": false,
+    "show_mo": false,
+    "api_key_env": "ZAI_API_KEY"
+  },
+  "kimi": {
+    "enabled": false,
+    "show_5h": true,
+    "show_7d": false,
+    "api_key_env": "KIMI_API_KEY"
+  }
+}

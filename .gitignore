@@ -1,0 +1,25 @@
+# Keys & auth — JANGAN PUSH
+agent/auth.json
+agent/models-store.json
+
+# Sessions & prompts — data pribadi
+agent/sessions/
+agent/run-history.jsonl
+
+# Cache & MCP — bisa bocorin key dari tool responses
+agent/mcp-cache.json
+context-mode/
+
+# IPC & orchestration
+agent/intercom/
+agent/teams/
+
+# Task artifacts
+tasks/
+
+# node_modules
+agent/npm/node_modules/
+
+# OS junk
+.DS_Store
+Thumbs.db
