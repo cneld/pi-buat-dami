@@ -1,8 +1,8 @@
-# Setup Pi Agent dari Repo Ini
+# Setup Pi Agent dari Repo Ini v0.82.0
 
-## Buat temen (yang clone repo ini)
+## Buat temen (clone repo ini)
 
-### 1. Backup dulu punya lu sendiri (kalo udah pake pi agent)
+### 1. Backup punya lu sendiri (kalo udah pake pi agent)
 
 ```powershell
 # PowerShell
@@ -17,15 +17,13 @@ rename "%USERPROFILE%\.pi" "%USERPROFILE%\.pi.bak"
 ### 2. Clone repo jadi `~/.pi`
 
 ```cmd
-git clone <repo-url> "%USERPROFILE%\.pi"
+git clone https://github.com/cneld/pi-buat-dami.git "%USERPROFILE%\.pi"
 ```
 
-### 3. Install packages
+### 3. (Otomatis) Pi install packages dari `agent/settings.json`
 
-```cmd
-cd /d "%USERPROFILE%\.pi\agent\npm"
-npm install
-```
+Pas pertama pi jalan, dia bakal auto-install semua packages yang ada di array `packages`.
+Ga perlu `npm install` manual lagi.
 
 ### 4. Setup API key
 
@@ -44,8 +42,16 @@ Buat file `%USERPROFILE%\.pi\agent\auth.json` isinya:
 }
 ```
 
-Daftar key yang perlu disesuaikan sama provider yang lu pake.
+Sesuaiin sama provider yang lu pake.
 
-### 5. (Opsional) Vault path buat Second Brain
+### 5. (Opsional) Second Brain vault path
 
-Set env variable `PI_VAULT_PATH` atau edit langsung di `agent/extensions/clarify.ts`.
+Set env variable `PI_VAULT_PATH` atau edit di `agent/extensions/clarify.ts`.
+
+### Checkout versi tertentu
+
+```cmd
+cd /d "%USERPROFILE%\.pi"
+git tag -l
+git checkout v0.82.0
+```

@@ -50,15 +50,15 @@ git commit -m "pesan jelas"
 Kalo ini versi baru (teman bisa checkout versi tertentu):
 
 ```powershell
-git tag v2           # tag versi sekarang
-git push origin v2   # push tag
+git tag v0.82.0           # tag versi sekarang
+git push origin v0.82.0   # push tag
 ```
 
 Teman clone:
 
-```powershell
+```cmd
 git clone <url> ~\.pi
-git checkout v1      # ambil versi 1
+git checkout v0.82.0      # ambil versi tertentu
 ```
 
 ---
@@ -84,15 +84,16 @@ git push origin main --tags
 | `settings.json` | Skill yang diaktifin |
 | `agent/settings.json` | Model, theme, packages, provider |
 | `agent/keybindings.json` | Keybindings kustom |
-| `agent/themes/` | Tema |
-| `agent/extensions/` | Extension scripts |
+| `agent/themes/` | Tema (gruvbox-dark-hard default) |
+| `agent/extensions/` | Extension scripts (clarify, input-bar-mcp-status, orca-prefill, dll) |
+| `agent/extensions/pi-permission-system/` | Permission system config |
 | `agent/git/` | Git config per-domain |
-| `agent/npm/package.json` | Dependencies (kagak termasuk node_modules) |
-| `agent/bin/` | Binary tools (fd, rg) |
-| `agent/skills/` | Skill files |
+| `agent/skills/` | Agent skills (caveman, ask-user-gate, system-audit) |
 | `agent/trust.json` | Trusted directories |
 | `agent/usage-bar.json` | Usage bar config |
 | `agent/mcp-onboarding.json` | MCP onboarding state |
+| `skills/` | Skill repos (academic-research-skills) |
+| `pi-input-revamp.json` | Input bar layout & animasi config |
 | `qcode/settings.json` | QCode settings |
 | `README.md` | Info repo |
 | `SETUP.md` | Cara setup buat temen |
