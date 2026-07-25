@@ -1,5 +1,6 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync, statSync, rmSync } from "node:fs";
+import { join } from "node:path";
 
 // F-07: vault path is per-machine, not hardcoded to one user.
 // Override with `PI_SECOND_BRAIN_VAULT=/path/to/vault`. The block below is
@@ -15,10 +16,11 @@ function vaultExists(): boolean {
   }
 }
 
-// F-04: ponytail level is now per-session (was module-level mutable state that
-// leaked across concurrent sessions in the same process).
 const DEFAULT_LEVEL = "full";
 const ponytailLevels = new Map<string, string>();
+
+const CAVEMAN_DEFAULT_LEVEL = "full";
+const cavemanLevels = new Map<string, string>();
 
 function sessionKey(pi: ExtensionAPI, ctx: any): string {
   try {
@@ -30,6 +32,15 @@ function sessionKey(pi: ExtensionAPI, ctx: any): string {
   return "default";
 }
 
+function detectCavemanLevel(prompt: string): string | null {
+  const lower = prompt.toLowerCase();
+  if (/stop caveman|normal mode/.test(lower)) return "off";
+  if (/caveman\s+ultra/.test(lower)) return "ultra";
+  if (/caveman\s+lite/.test(lower)) return "lite";
+  if (/caveman\s+full/.test(lower)) return "full";
+  return null;
+}
+
 function detectLevel(prompt: string): string | null {
   const lower = prompt.toLowerCase();
   if (/ponytail\s+off/.test(lower)) return "off";
@@ -39,13 +50,31 @@ function detectLevel(prompt: string): string | null {
   return null;
 }
 
+function autoPruneSessions(): void {
+  const agentDir = process.env.PI_AGENT_DIR || join(process.env.HOME || process.env.USERPROFILE || "", ".pi");
+  const sessionsDir = join(agentDir, "agent", "sessions");
+  if (!existsSync(sessionsDir)) return;
+  const maxAgeDays = 30;
+  const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000;
+  const entries = readdirSync(sessionsDir).filter((n) => !n.startsWith("."));
+  for (const name of entries) {
+    const full = join(sessionsDir, name);
+    try {
+      if (statSync(full).mtimeMs < cutoff) rmSync(full, { recursive: true, force: true });
+    } catch { /* ignore */ }
+  }
+}
+
 export default function (pi: ExtensionAPI) {
   pi.on("session_start", (_event, ctx) => {
     ponytailLevels.set(sessionKey(pi, ctx), DEFAULT_LEVEL);
+    cavemanLevels.set(sessionKey(pi, ctx), CAVEMAN_DEFAULT_LEVEL);
+    autoPruneSessions();
   });
 
   pi.on("session_shutdown", (_event, ctx) => {
     ponytailLevels.delete(sessionKey(pi, ctx));
+    cavemanLevels.delete(sessionKey(pi, ctx));
   });
 
   pi.on("before_agent_start", async (event, ctx) => {
@@ -54,92 +83,61 @@ export default function (pi: ExtensionAPI) {
     const detected = detectLevel(event.prompt);
     if (detected) level = detected;
     ponytailLevels.set(key, level);
+    let cavemanLevel = cavemanLevels.get(key) ?? CAVEMAN_DEFAULT_LEVEL;
+    const cavemanDetected = detectCavemanLevel(event.prompt);
+    if (cavemanDetected) cavemanLevel = cavemanDetected;
+    cavemanLevels.set(key, cavemanLevel);
 
     try {
       ctx.ui.setStatus("ponytail", `ponytail: ${level}`);
+      ctx.ui.setStatus("caveman", cavemanLevel !== "off" ? `🦴 ${cavemanLevel.toUpperCase()}` : "");
     } catch {
       // non-TUI mode, ignore
     }
 
-    const ponytailSection =
-      level !== "off"
-        ? `\n\n## Ponytail Mode (level: ${level})
+    // F-06: compact mode section — one block, level-specific rules only
+    const modeLines: string[] = [];
+    if (level !== "off") {
+      const rules = level === "ultra"
+        ? "Stdlib/native first, no deps, no abstractions, one-liner > function, 3 lines max"
+        : level === "lazy"
+          ? "Stdlib/native first, no new deps, no boilerplate, delete > add"
+          : "Stdlib/native first, no unrequested abstractions, shortest diff wins";
+      modeLines.push(`Ponytail: ${level} (${rules})`);
+    }
+    if (cavemanLevel !== "off") {
+      const rules = cavemanLevel === "lite"
+        ? "No filler/hedging, keep articles + sentences"
+        : cavemanLevel === "ultra"
+          ? "Drop articles/conjunctions/filler, fragments OK, no tables/emoji"
+          : "Drop articles/filler/hedging, fragments OK, short synonyms, tech acronyms OK";
+      modeLines.push(`Caveman: ${cavemanLevel} (${rules})`);
+    }
+    const modesSection = modeLines.length ? `\n\n## Modes\n${modeLines.map(l => "- " + l).join("\n")}` : "";
 
-${
-  level === "ultra"
-    ? `
-- Shortest possible solution. Stdlib/native first, always.
-- No dependencies unless strictly necessary.
-- No boilerplate, no abstractions.
-- One-liner > function > class.
-- If it can be done in 3 lines, don't write 10.`
-  : level === "lazy"
-    ? `
-- Laziest solution that works. Stdlib/native first.
-- No dependencies unless existing one does it.
-- No boilerplate, no unrequested abstractions.
-- Delete over add.`
-    : `
-- Stdlib and native first.
-- No unrequested abstractions, no boilerplate.
-- Deletion over addition.
-- Shortest working diff wins.`
-}`
-
-        : "";
-
-    // F-07: only inject the Second Brain protocol when the vault is present.
+    // F-06: compact Second Brain — pointer to vault, not full instructions
     const secondBrainSection = vaultExists()
-      ? `\n\n## Second Brain — Session Context Protocol
-
-Vault path: ${VAULT}
-
-### START: read these before anything else
-1. \`${VAULT}/01 - AI Memory/Pi Profile.md\` — identity, preferences, user context
-2. \`${VAULT}/01 - AI Memory/Skills & Context.md\` — installed extensions, skills, packages, tools
-3. \`${VAULT}/01 - AI Memory/Decisions Log.md\` — prior decisions
-4. \`${VAULT}/01 - AI Memory/Sessions/\` — latest session file (sorted descending)
-5. \`${VAULT}/04 - Daily/<today>.md\` — today's daily note (if exists)
-
-### MID-SESSION: update progressively (safe for Ctrl+C 2x)
-1. **Daily Note** — update \`${VAULT}/04 - Daily/<today>.md\` after each meaningful task
-2. **Session Log** — update \`${VAULT}/01 - AI Memory/Sessions/<today>.md\` gradually
-3. **Skills & Context** — update \`${VAULT}/01 - AI Memory/Skills & Context.md\` whenever installing/uninstalling extensions, skills, packages, or tools
-4. **Decisions Log** — append to \`${VAULT}/01 - AI Memory/Decisions Log.md\` on new decisions
-5. **Pi Profile** — update \`${VAULT}/01 - AI Memory/Pi Profile.md\` when meaningful new context emerges
-
-Don't wait for session end. If Ctrl+C hits mid-task, latest state is already saved.`
+      ? `\n\n## Second Brain
+Vault: ${VAULT}
+START: Read \`${VAULT}/01 - AI Memory/Pi Profile.md\`, \`Skills & Context.md\`, \`Decisions Log.md\`, latest \`Sessions/*.md\`, \`04 - Daily/<today>.md\`
+MID: Update daily notes + session log after each task. Skills/Decisions on change. Profile when new context emerges. Don't wait for session end.\n\nContent format: Obsidian Flavored Markdown (wikilinks, embeds, callouts, frontmatter, tags).`
       : "";
+
+    // F-06: fingerprint guard — prevent double injection
+    const fingerprint = "[Ponytail:";
+    const alreadyInjected = (event.systemPrompt || "").includes(fingerprint);
+    if (alreadyInjected) return { systemPrompt: event.systemPrompt };
 
     return {
       systemPrompt:
         event.systemPrompt +
         `\n\n## Clarifying Questions
-
-Before acting on a user request, determine if the user's intent is fully clear. 
-If the request is vague, ambiguous, or missing critical details, ask clarifying 
-questions FIRST before reading files, writing code, or executing commands.
-
-Do NOT ask questions for trivial requests ("hello", "thanks", "what's 2+2").
-Do NOT ask questions when the request is already clear and specific.
-
-Examples of when to ask:
-- "Bikin aplikasi todo" → "Ada preferensi stack? React/Vue? Local storage / API?"
-- "Fix bug ini" → "Bisa jelasin expected vs actual behavior?"
-- "Refactor kode ini" → "Prioritas readability / performance / maintainability?"
-
-When asking questions, be concise — max 2-3 pertanyaan, langsung ke intinya.` +
-        ponytailSection +
+Before acting on a user request, determine if the user's intent is fully clear. If vague/ambiguous, ask clarifying questions FIRST. Do NOT ask for trivial requests or when intent is clear.
+Examples: "Bikin app todo" → ask stack preference. "Fix bug" → ask expected vs actual behavior.` +
+        modesSection +
         secondBrainSection +
         `\n\n## Response Footer
-
-Append this footer to every response:
-
-\`\`\`
-[Ponytail: ${level} | Context-mode: active]
-\`\`\`
-
-Context-mode stays "active" as long as you have context-mode tools available.`,
+Append to every response:\n\`\`\`\n[Ponytail: ${level} | Caveman: ${cavemanLevel} | Context-mode: active]\n\`\`\``,
     };
   });
 }

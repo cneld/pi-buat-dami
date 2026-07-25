@@ -53,7 +53,7 @@ Use `ask_user_question` with:
 - `multiSelect: true` only when multiple choices can validly be selected
 - previews only when visual/code comparison materially helps
 
-Never invent option labels for built-in escape rows such as `Other`, `Type something.`, `Chat about this`, or `Next →`.
+Never invent option labels for built-in escape rows — the runtime reserves exactly `Other`, `Type something.`, and `Next`.
 
 ### 4) Commit the decision
 
@@ -81,8 +81,10 @@ If attempt 2 is needed, narrow the choices:
 
 After attempt 2:
 
-- For `high_stakes` or `both`: stop and ask for explicit user direction; do not guess.
-- For `ambiguous` only: if the user says “your call”, proceed with the most reversible default and state assumptions.
+- If the user answered (not cancelled): commit their choice normally.
+- If the user cancelled both attempts:
+  - For `high_stakes` or `both`: **ask via plain chat text** (not the tool — the tool budget is exhausted) and wait for explicit direction before proceeding. Do not guess, do not default.
+  - For `ambiguous` only: if the user says "your call", proceed with the most reversible default and state assumptions.
 
 ## Good use examples
 

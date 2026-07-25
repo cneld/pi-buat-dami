@@ -89,16 +89,12 @@ function updateSessionRef(ctx: any): void {
     const file = ctx?.sessionManager?.getSessionFile?.();
     currentAgentSessionPath =
       typeof file === "string" && file.startsWith("/") ? file : undefined;
-  } catch {
-    currentAgentSessionPath = undefined;
-  }
+  } catch (e: any) { console.error("[herdr] getSessionFile failed:", e.message); currentAgentSessionPath = undefined; }
 
   try {
     const id = ctx?.sessionManager?.getSessionId?.();
     currentAgentSessionId = typeof id === "string" && id.length > 0 ? id : undefined;
-  } catch {
-    currentAgentSessionId = undefined;
-  }
+  } catch (e: any) { console.error("[herdr] getSessionId failed:", e.message); currentAgentSessionId = undefined; }
 }
 
 function withSessionRef(params: Record<string, unknown>): Record<string, unknown> {

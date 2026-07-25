@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.81.1",
+  "lastChangelogVersion": "0.82.0",
   "theme": "gruvbox-dark-hard",
   "defaultProvider": "opencode",
   "defaultModel": "deepseek-v4-flash-free",
@@ -29,8 +29,8 @@
     "npm:@ogulcancelik/pi-herdr",
     "npm:pi-prompt-workflows",
     "npm:@satas/pi-usage-bar",
-    "git:https://github.com/hasit/pi-community-themes",
-    "npm:@tmustier/pi-agent-teams"
+    "npm:@tmustier/pi-agent-teams",
+    "npm:@nerisma/pi-input-revamp"
   ],
   "enabledModels": [
     "openrouter/~anthropic/claude-sonnet-latest",
