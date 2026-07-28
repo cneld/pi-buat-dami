@@ -119,8 +119,7 @@ export default function (pi: ExtensionAPI) {
     const secondBrainSection = vaultExists()
       ? `\n\n## Second Brain
 Vault: ${VAULT}
-START: Read \`${VAULT}/01 - AI Memory/Pi Profile.md\`, \`Skills & Context.md\`, \`Decisions Log.md\`, latest \`Sessions/*.md\`, \`04 - Daily/<today>.md\`
-MID: Update daily notes + session log after each task. Skills/Decisions on change. Profile when new context emerges. Don't wait for session end.\n\nContent format: Obsidian Flavored Markdown (wikilinks, embeds, callouts, frontmatter, tags).`
+START: Use native Obsidian CLI to read \`${VAULT}/01 - AI Memory/Pi Profile.md\`, \`Skills & Context.md\`, \`Decisions Log.md\`, latest \`Sessions/*.md\`, \`04 - Daily/<today>.md\`. Use executable `C:/Program Files/Obsidian/Obsidian.com` on Windows; do not use direct file tools for Second Brain.\nMID: Use native Obsidian CLI for all Second Brain edits; update daily notes + session log after each task. Skills/Decisions on change. Profile when new context emerges. Don't wait for session end.\n\nContent format: Obsidian Flavored Markdown (wikilinks, embeds, callouts, frontmatter, tags).`
       : "";
 
     // F-06: fingerprint guard — prevent double injection

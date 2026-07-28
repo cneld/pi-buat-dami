@@ -17,9 +17,15 @@
 
     "write": "ask",
     "edit": "ask",
-    "bash": "ask",
+    "bash": {
+      "*": "ask",
+      "\"C:/Program Files/Obsidian/Obsidian.com\" *": "allow"
+    },
 
-    "skill": { "*": "ask" },
+    "skill": {
+      "*": "ask",
+      "ask-user-gate": "allow"
+    },
     "mcp": { "*": "ask" }
   }
 }
