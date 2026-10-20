@@ -1,9 +1,9 @@
 {
   "layout": {
     "topLeft": ["agent", "ext:ponytail", "ext:caveman", "thinking-level", "model", "cwd", "duration", "tools", "tok"],
-    "topRight": ["session-label", "ctx-percent", "ctx-tokens-full", "session-cost", "session-out", "session-hit", "session-miss"],
+    "topRight": ["session-label", "ctx-percent", "ctx-tokens-full"],
     "bottomLeft": ["ext:mcp-servers"],
-    "bottomRight": ["turn", "turn-duration", "turn-cost", "turn-out", "turn-hit", "turn-miss"]
+    "bottomRight": ["turn", "turn-duration", "session-cost", "session-out", "session-hit", "session-miss"]
   },
   "animations": {
     "typingPulse": true,

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://pi.dev/schemas/models.schema.json",
+  "providers": {
+    "clinepass": {
+      "modelOverrides": {
+        "cline-pass/glm-5.3": {
+          "comment": "GLM-5.3 (Z.ai) always reasons; its reasoning_effort enum is low/high/max only. Map pi levels explicitly so pi-task step requests (medium/off) resolve without the clamp warning. Values mirror what pi already clamped to.",
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "low",
+            "medium": "high",
+            "high": "high",
+            "xhigh": "max"
+          }
+        }
+      }
+    }
+  }
+}

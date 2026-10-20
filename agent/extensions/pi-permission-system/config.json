@@ -2,30 +2,25 @@
   "debugLog": false,
   "permissionReviewLog": true,
   "yoloMode": false,
-
-  "toolInputPreviewMaxLength": 400,
-  "toolTextSummaryMaxLength": 120,
-
   "piInfrastructureReadPaths": [],
-
   "permission": {
     "*": "allow",
     "path": {
       "*": "allow"
     },
     "external_directory": "allow",
-
     "write": "ask",
     "edit": "ask",
     "bash": {
       "*": "ask",
       "\"C:/Program Files/Obsidian/Obsidian.com\" *": "allow"
     },
-
     "skill": {
       "*": "ask",
       "ask-user-gate": "allow"
     },
-    "mcp": { "*": "ask" }
+    "mcp": {
+      "*": "allow"
+    }
   }
 }

@@ -9,7 +9,12 @@ agent/run-history.jsonl
 
 # Cache & MCP — bisa bocorin key dari tool responses
 agent/mcp-cache.json
+agent/mcp.json
 context-mode/
+
+# Missions & subagent runtime state
+agent/missions/
+agent/pi-subagents/
 
 # IPC & orchestration
 agent/intercom/

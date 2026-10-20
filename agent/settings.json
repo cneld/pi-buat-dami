@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.82.1",
+  "lastChangelogVersion": "1.3.0",
   "theme": "gruvbox-dark-hard",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-luna",
+  "defaultProvider": "opencode",
+  "defaultModel": "laguna-s-2.1-free",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:@gotgenes/pi-permission-system",
@@ -17,7 +17,6 @@
     "npm:@narumitw/pi-github-pr",
     "npm:@narumitw/pi-chrome-devtools",
     "npm:@narumitw/pi-wait-what",
-    "npm:pi-mcp-adapter",
     "npm:@gaodes/pi-graphify",
     "npm:pi-intercom",
     "npm:@tintinweb/pi-tasks",
@@ -28,7 +27,9 @@
     "npm:pi-prompt-workflows",
     "npm:@satas/pi-usage-bar",
     "npm:@tmustier/pi-agent-teams",
-    "npm:@nerisma/pi-input-revamp"
+    "npm:@nerisma/pi-input-revamp",
+    "npm:pi-clinepass-provider",
+    "npm:@andrewjacop/pi-herdr"
   ],
   "enabledModels": [
     "openrouter/~anthropic/claude-sonnet-latest",
@@ -39,5 +40,9 @@
     "openai-codex/gpt-5.6-terra",
     "openai-codex/gpt-5.6-sol",
     "opencode/deepseek-v4-flash-free"
+  ],
+  "extensions": [],
+  "defaultTools": [
+    "+codemode"
   ]
 }
